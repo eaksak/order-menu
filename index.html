@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ระบบสั่งสินค้า - Order Menu สำหรับร้านค้า Silom">
+  <title>📋 ระบบสั่งสินค้า | Order Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="logo-icon">📋</div>
+        <div class="header-text">
+          <h1>ระบบสั่งสินค้า</h1>
+          <p class="subtitle">Order Menu — Silom Branch</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="import-btn" id="importBtn" title="อัพเดทฐานข้อมูลสินค้า">
+          <span>📥</span>
+          <span class="import-btn-text">อัพเดทข้อมูล</span>
+        </button>
+        <div class="order-badge" id="orderBadge">
+          <span class="badge-icon">🛒</span>
+          <span class="badge-count" id="orderCount">0</span>
+        </div>
+        <div class="date-display" id="dateDisplay"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Search Bar -->
+  <section class="search-section">
+    <div class="search-container">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="ค้นหาสินค้า..." autocomplete="off">
+        <button class="clear-search" id="clearSearch" title="ล้างการค้นหา">✕</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Filter -->
+  <section class="category-section">
+    <div class="category-container">
+      <div class="category-scroll" id="categoryScroll">
+        <button class="category-pill active" data-category="all" id="cat-all">
+          <span class="pill-icon">📦</span>
+          <span class="pill-text">ทั้งหมด</span>
+          <span class="pill-count" id="count-all">0</span>
+        </button>
+        <!-- Category pills will be dynamically inserted here -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Product Table -->
+    <div class="table-wrapper">
+      <div class="table-header-info">
+        <h2 id="currentCategoryTitle">สินค้าทั้งหมด</h2>
+        <span class="item-count" id="visibleCount">0 รายการ</span>
+      </div>
+      <div class="table-scroll">
+        <table class="product-table" id="productTable">
+          <thead>
+            <tr>
+              <th class="th-no">#</th>
+              <th class="th-name">ชื่อสินค้า</th>
+              <th class="th-cost">ทุน (฿)</th>
+              <th class="th-price">ราคาขาย (฿)</th>
+              <th class="th-unit">หน่วยย่อย</th>
+              <th class="th-pack">ขนาดแพ็ค</th>
+              <th class="th-amount">สั่งซื้อ (ลัง)</th>
+            </tr>
+          </thead>
+          <tbody id="productBody">
+            <!-- Products will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-icon">🔍</div>
+        <p>ไม่พบสินค้าที่ค้นหา</p>
+      </div>
+    </div>
+
+    <!-- Order Summary (Floating) -->
+    <div class="order-summary-toggle" id="summaryToggle" style="display: none;">
+      <button class="summary-toggle-btn" id="toggleSummaryBtn">
+        <span>🛒</span>
+        <span id="toggleBadge">0</span>
+        <span>รายการ — ฿</span>
+        <span id="toggleTotal">0.00</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- Order Summary Panel (Slide-up) -->
+  <div class="order-overlay" id="orderOverlay"></div>
+  <aside class="order-panel" id="orderPanel">
+    <div class="panel-header">
+      <h3>🛒 สรุปรายการสั่งซื้อ</h3>
+      <button class="close-panel" id="closePanel">✕</button>
+    </div>
+    <div class="panel-body">
+      <div class="summary-list" id="summaryList">
+        <div class="summary-empty">
+          <p>ยังไม่มีรายการสินค้า</p>
+          <span>กรุณาเลือกสินค้าและระบุจำนวน</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer">
+      <div class="total-row">
+        <span class="total-label">รวมทั้งสิ้น</span>
+        <span class="total-items" id="totalItems">0 รายการ</span>
+      </div>
+      <div class="total-row grand-total">
+        <span class="total-label">ยอดรวม (ราคาขาย)</span>
+        <span class="total-value" id="grandTotalPrice">฿ 0.00</span>
+      </div>
+      <div class="total-row cost-total">
+        <span class="total-label">ยอดรวม (ทุน)</span>
+        <span class="total-value" id="grandTotalCost">฿ 0.00</span>
+      </div>
+      <div class="panel-actions">
+        <button class="btn btn-clear" id="clearAllBtn">
+          <span>🗑️</span> ล้างทั้งหมด
+        </button>
+        <button class="btn btn-print" id="printBtn">
+          <span>🖨️</span> พิมพ์ / ดูตัวอย่าง
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Import Data Modal -->
+  <div class="import-overlay" id="importOverlay"></div>
+  <div class="import-modal" id="importModal">
+    <div class="import-modal-header">
+      <h3>📥 อัพเดทฐานข้อมูลสินค้า</h3>
+      <button class="close-panel" id="closeImport">✕</button>
+    </div>
+    <div class="import-modal-body">
+      <!-- Current data info -->
+      <div class="data-info" id="dataInfo">
+        <div class="data-info-row">
+          <span class="data-info-label">📊 ข้อมูลปัจจุบัน</span>
+          <span class="data-info-value" id="currentDataCount">0 รายการ</span>
+        </div>
+        <div class="data-info-row">
+          <span class="data-info-label">📅 อัพเดทล่าสุด</span>
+          <span class="data-info-value" id="lastUpdateDate">ไม่ทราบ</span>
+        </div>
+        <div class="data-info-row">
+          <span class="data-info-label">💾 แหล่งข้อมูล</span>
+          <span class="data-info-value" id="dataSource">ไฟล์เริ่มต้น</span>
+        </div>
+      </div>
+
+      <!-- Upload area -->
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon">📁</div>
+        <p class="upload-title">ลากไฟล์มาวางที่นี่</p>
+        <p class="upload-subtitle">หรือคลิกเพื่อเลือกไฟล์</p>
+        <p class="upload-formats">รองรับ: .csv, .xlsx (Excel)</p>
+        <input type="file" id="fileInput" accept=".csv,.xlsx" hidden>
+      </div>
+
+      <!-- Upload status -->
+      <div class="upload-status" id="uploadStatus" style="display: none;">
+        <div class="status-icon" id="statusIcon">⏳</div>
+        <p class="status-text" id="statusText">กำลังประมวลผล...</p>
+      </div>
+
+      <!-- Import preview -->
+      <div class="import-preview" id="importPreview" style="display: none;">
+        <h4>📋 ตัวอย่างข้อมูลที่จะนำเข้า</h4>
+        <div class="preview-stats" id="previewStats"></div>
+        <div class="preview-table-wrapper">
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th>ชื่อสินค้า</th>
+                <th>ทุน</th>
+                <th>ราคา</th>
+                <th>หน่วย</th>
+                <th>ขนาดแพ็ค</th>
+                <th>หมวดหมู่</th>
+              </tr>
+            </thead>
+            <tbody id="previewBody"></tbody>
+          </table>
+        </div>
+        <div class="import-actions">
+          <button class="btn btn-clear" id="cancelImport">
+            <span>✕</span> ยกเลิก
+          </button>
+          <button class="btn btn-print" id="confirmImport">
+            <span>✅</span> ยืนยันนำเข้าข้อมูล
+          </button>
+        </div>
+      </div>
+
+      <!-- Instructions -->
+      <div class="import-instructions">
+        <h4>📝 วิธีอัพเดทข้อมูล</h4>
+        <ol>
+          <li>เปิดไฟล์ Excel รายงานสินค้าคงเหลือ</li>
+          <li>บันทึกเป็น CSV (Save As → CSV UTF-8)</li>
+          <li>ลากไฟล์ CSV มาวางในกรอบด้านบน หรือคลิกเลือกไฟล์</li>
+          <li>ตรวจสอบตัวอย่างข้อมูล แล้วกด "ยืนยันนำเข้า"</li>
+        </ol>
+        <p class="import-note">⚠️ คอลัมน์ที่ต้องมี: No., PLU Code, Name, Price, Cost, Unit, Category</p>
+        <div class="import-reset-section">
+          <button class="btn-reset-data" id="resetDataBtn">🔄 กลับไปใช้ข้อมูลเริ่มต้น</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print Template (Hidden, used for printing) -->
+  <div class="print-area" id="printArea">
+    <div class="print-header">
+      <h2>ใบสั่งสินค้า</h2>
+      <p class="print-subtitle">Order Form — Silom Branch</p>
+      <div class="print-meta">
+        <span id="printDate"></span>
+        <span id="printTime"></span>
+      </div>
+    </div>
+    <table class="print-table">
+      <thead>
+        <tr>
+          <th class="print-th-no">#</th>
+          <th class="print-th-name">ชื่อสินค้า</th>
+          <th class="print-th-cost">ทุน (฿)</th>
+          <th class="print-th-price">ราคา (฿)</th>
+          <th class="print-th-unit">หน่วยย่อย</th>
+          <th class="print-th-pack">ขนาดแพ็ค</th>
+          <th class="print-th-amount">สั่ง (ลัง)</th>
+          <th class="print-th-pieces">รวม (ชิ้น)</th>
+          <th class="print-th-subtotal">รวมเงิน (฿)</th>
+        </tr>
+      </thead>
+      <tbody id="printBody"></tbody>
+      <tfoot>
+        <tr class="print-total-row">
+          <td colspan="6" class="print-total-label">รวมทั้งสิ้น</td>
+          <td class="print-total-qty" id="printTotalQty">0</td>
+          <td class="print-total-pieces" id="printTotalPieces">0</td>
+          <td class="print-total-value" id="printTotalValue">฿ 0.00</td>
+        </tr>
+        <tr class="print-cost-row">
+          <td colspan="8" class="print-total-label" style="text-align: right;">รวมทุน: <span id="printTotalCost" style="font-weight: 700; margin-left: 10px;">฿ 0.00</span></td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="print-footer">
+      <div class="print-sign-area">
+        <div class="sign-box">
+          <div class="sign-line"></div>
+          <p>ผู้สั่งสินค้า</p>
+        </div>
+        <div class="sign-box">
+          <div class="sign-line"></div>
+          <p>ผู้อนุมัติ</p>
+        </div>
+      </div>
+      <p class="print-note">* เอกสารนี้จัดทำจากระบบสั่งสินค้าอัตโนมัติ</p>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
