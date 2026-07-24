@@ -314,15 +314,10 @@ function renderProducts() {
     if (amt > 0) tr.classList.add('has-amount');
     tr.dataset.productId = product.id;
 
-    const categoryTag = currentCategory === 'all'
-      ? `<div class="td-category-tag">${categoryDisplay[product.category] || product.category}</div>`
-      : '';
-
     tr.innerHTML = `
       <td class="td-no">${index + 1}</td>
       <td class="td-name">
         <div class="name-text">${product.name}</div>
-        ${categoryTag}
         <div class="mobile-pack-row">
           <span class="pack-label">📦 1 ลัง =</span>
           <input type="number"

@@ -449,14 +449,7 @@ body::before {
 }
 
 .td-category-tag {
-  display: inline-block;
-  font-size: 0.65rem;
-  color: var(--accent-secondary);
-  background: rgba(255, 203, 71, 0.08);
-  padding: 1px 8px;
-  border-radius: 6px;
-  margin-top: 2px;
-  font-weight: 400;
+  display: none !important;
 }
 
 .td-cost {
