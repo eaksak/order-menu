@@ -1052,104 +1052,169 @@ body::before {
   }
 }
 
+/* ---------- Pack Size Controls ---------- */
+.pack-control,
+.mobile-pack-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(247, 147, 26, 0.08);
+  border: 1px solid rgba(247, 147, 26, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 3px 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.mobile-pack-row {
+  display: none;
+  margin-top: 6px;
+}
+
+.pack-input {
+  width: 52px;
+  height: 32px;
+  text-align: center;
+  border: 1.5px solid var(--accent-primary);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--accent-secondary);
+  font-family: var(--font-family);
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
+  transition: var(--transition);
+  -moz-appearance: textfield;
+}
+
+.pack-input::-webkit-outer-spin-button,
+.pack-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.pack-input:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 10px rgba(247, 147, 26, 0.4);
+  background: rgba(247, 147, 26, 0.15);
+}
+
+.name-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  html { font-size: 14px; }
+  html { font-size: 16px; }
 
-  .app-header { padding: 10px 16px; }
-  .header-text h1 { font-size: 1.2rem; }
+  .app-header { padding: 12px 16px; }
+  .header-text h1 { font-size: 1.3rem; }
   .date-display { display: none; }
-  .logo-icon { width: 40px; height: 40px; font-size: 1.6rem; }
+  .logo-icon { width: 44px; height: 44px; font-size: 1.7rem; }
 
   .search-section { padding: 12px 16px 0; }
+  .search-box input { font-size: 1.05rem; padding: 12px 0; }
+
   .category-section { padding: 10px 16px; top: 63px; }
+  .category-pill { padding: 8px 16px; font-size: 0.92rem; }
 
   .main-content { padding: 16px 16px 120px; }
 
   .table-header-info { padding: 12px 14px; }
-  .product-table th { padding: 10px 10px; font-size: 0.72rem; }
-  .product-table td { padding: 8px 10px; font-size: 0.82rem; }
+  .table-header-info h2 { font-size: 1.15rem; }
+  .product-table th { padding: 12px 10px; font-size: 0.85rem; }
+  .product-table td { padding: 10px 10px; font-size: 0.95rem; }
 
-  .th-name { min-width: 180px; }
-  .th-cost { width: 70px; }
-  .th-price { width: 80px; }
+  .name-text { font-size: 1.1rem; }
+  .td-price { font-size: 1.05rem; }
+  .td-unit { font-size: 0.9rem; }
 
-  .amount-btn { width: 28px; height: 28px; font-size: 0.9rem; }
-  .amount-input { width: 44px; height: 30px; font-size: 0.82rem; }
+  .amount-btn { width: 34px; height: 34px; font-size: 1.1rem; }
+  .amount-input { width: 48px; height: 34px; font-size: 0.98rem; }
 
   .panel-header { padding: 16px 16px 12px; }
   .panel-body { padding: 10px 16px; }
   .panel-footer { padding: 12px 16px 20px; }
 
-  .summary-toggle-btn { padding: 12px 20px; font-size: 0.88rem; }
+  .summary-toggle-btn { padding: 14px 24px; font-size: 1rem; font-weight: 700; }
 }
 
 @media (max-width: 600px) {
-  .th-cost { display: none; }
-  .td-cost { display: none; }
-  .th-pack { display: none; }
-  .td-pack { display: none; }
+  /* On small screens, hide separate pack/unit table columns & embed editable pack row inside product name cell */
+  .th-cost, .td-cost { display: none; }
+  .th-unit, .td-unit { display: none; }
+  .th-pack, .td-pack { display: none; }
+  .mobile-pack-row { display: inline-flex; }
+
   .th-name { min-width: auto; }
 }
 
 @media (max-width: 480px) {
-  html { font-size: 13px; }
+  html { font-size: 16px; }
 
-  .app-header { padding: 8px 12px; }
-  .header-left { gap: 8px; }
-  .logo-icon { width: 36px; height: 36px; font-size: 1.4rem; }
-  .header-text h1 { font-size: 1.1rem; }
-  .order-badge { padding: 6px 10px; }
+  .app-header { padding: 10px 12px; }
+  .header-left { gap: 10px; }
+  .logo-icon { width: 40px; height: 40px; font-size: 1.5rem; }
+  .header-text h1 { font-size: 1.25rem; }
+  .order-badge { padding: 8px 12px; font-size: 0.95rem; }
 
   .search-section { padding: 10px 12px 0; }
-  .search-box { padding: 0 12px; }
-  .search-box input { padding: 10px 0; font-size: 0.9rem; }
+  .search-box { padding: 0 14px; }
+  .search-box input { padding: 12px 0; font-size: 1.05rem; }
 
-  .category-section { padding: 8px 12px; top: 55px; }
-  .category-pill { padding: 6px 12px; font-size: 0.78rem; }
+  .category-section { padding: 8px 12px; top: 58px; }
+  .category-pill { padding: 8px 14px; font-size: 0.9rem; }
 
   .main-content { padding: 12px 8px 120px; }
 
-  /* Hide cost column on phones — staff usually only need price */
-  .th-cost { display: none; }
-  .td-cost { display: none; }
+  /* Table column widths for phone screen */
+  .th-no { width: 28px; }
+  .th-price { width: 75px; text-align: right; }
+  .th-amount { width: 120px; }
 
-  /* Tighten the table so it fits without horizontal scroll */
-  .th-name { min-width: auto; }
-  .th-no { width: 32px; }
-  .th-price { width: 65px; }
-  .th-unit { width: 50px; }
-  .th-amount { width: 110px; }
+  .product-table th { padding: 10px 6px; font-size: 0.82rem; }
+  .product-table td { padding: 10px 6px; }
 
-  .product-table th { padding: 8px 6px; font-size: 0.68rem; }
-  .product-table td { padding: 8px 6px; font-size: 0.8rem; }
+  .td-no { font-size: 0.8rem; }
+  .name-text { font-size: 1.15rem; font-weight: 600; }
+  .td-category-tag { font-size: 0.7rem; padding: 2px 8px; margin-top: 3px; }
+  .td-price { font-size: 1.1rem; font-weight: 700; }
 
-  .td-no { font-size: 0.7rem; }
-  .td-name { font-size: 0.8rem; line-height: 1.3; }
-  .td-category-tag { font-size: 0.58rem; padding: 0 6px; }
-  .td-price { font-size: 0.82rem; }
-  .td-unit { font-size: 0.75rem; }
+  .mobile-pack-row {
+    font-size: 0.92rem;
+    padding: 4px 10px;
+    margin-top: 6px;
+  }
 
-  .amount-btn { width: 26px; height: 26px; font-size: 0.85rem; }
-  .amount-input { width: 36px; height: 28px; font-size: 0.8rem; }
-  .amount-control { gap: 2px; }
+  .pack-input {
+    width: 54px;
+    height: 34px;
+    font-size: 1.05rem;
+  }
 
-  .table-header-info { padding: 10px 10px; }
-  .table-header-info h2 { font-size: 0.92rem; }
+  .amount-btn { width: 36px; height: 36px; font-size: 1.2rem; }
+  .amount-input { width: 46px; height: 36px; font-size: 1.05rem; }
+  .amount-control { gap: 4px; }
 
-  .summary-toggle-btn { padding: 10px 18px; font-size: 0.82rem; }
+  .table-header-info { padding: 12px 10px; }
+  .table-header-info h2 { font-size: 1.1rem; }
+
+  .summary-toggle-btn { padding: 14px 22px; font-size: 0.98rem; }
 
   .panel-actions { flex-direction: column; }
 }
 
 @media (max-width: 380px) {
-  html { font-size: 12.5px; }
-  .header-text h1 { font-size: 1rem; }
-  .subtitle { font-size: 0.7rem; }
-  .logo-icon { width: 32px; height: 32px; font-size: 1.2rem; }
-  .product-table td { padding: 6px 4px; }
-  .product-table th { padding: 6px 4px; }
-  .amount-input { width: 32px; }
+  html { font-size: 15px; }
+  .header-text h1 { font-size: 1.15rem; }
+  .subtitle { font-size: 0.75rem; }
+  .logo-icon { width: 36px; height: 36px; font-size: 1.3rem; }
+  .name-text { font-size: 1.1rem; }
+  .amount-btn { width: 34px; height: 34px; }
+  .amount-input { width: 40px; height: 34px; }
 }
 
 /* ---------- Scrollbar ---------- */

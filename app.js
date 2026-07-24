@@ -321,13 +321,34 @@ function renderProducts() {
     tr.innerHTML = `
       <td class="td-no">${index + 1}</td>
       <td class="td-name">
-        ${product.name}
+        <div class="name-text">${product.name}</div>
         ${categoryTag}
+        <div class="mobile-pack-row">
+          <span class="pack-label">📦 1 ลัง =</span>
+          <input type="number"
+                 class="pack-input"
+                 data-id="${product.id}"
+                 value="${product.packSize || 1}"
+                 min="1"
+                 inputmode="numeric">
+          <span class="pack-unit">${product.unit}</span>
+        </div>
       </td>
       <td class="td-cost">${formatCurrency(product.cost)}</td>
       <td class="td-price">${formatCurrency(product.price)}</td>
       <td class="td-unit">${product.unit}</td>
-      <td class="td-pack">1 ลัง = ${product.packSize || 1}</td>
+      <td class="td-pack">
+        <div class="pack-control">
+          <span class="pack-label">1 ลัง =</span>
+          <input type="number"
+                 class="pack-input"
+                 data-id="${product.id}"
+                 value="${product.packSize || 1}"
+                 min="1"
+                 inputmode="numeric">
+          <span class="pack-unit">${product.unit}</span>
+        </div>
+      </td>
       <td class="td-amount">
         <div class="amount-control">
           <button class="amount-btn minus" data-id="${product.id}" data-action="minus" title="ลด">−</button>
@@ -347,17 +368,46 @@ function renderProducts() {
     const minusBtn = tr.querySelector('.minus');
     const plusBtn = tr.querySelector('.plus');
     const input = tr.querySelector('.amount-input');
+    const packInputs = tr.querySelectorAll('.pack-input');
 
     minusBtn.addEventListener('click', () => changeAmount(product.id, -1, tr));
     plusBtn.addEventListener('click', () => changeAmount(product.id, 1, tr));
     input.addEventListener('change', (e) => setAmount(product.id, parseInt(e.target.value) || 0, tr));
     input.addEventListener('focus', (e) => e.target.select());
 
+    packInputs.forEach(packInp => {
+      packInp.addEventListener('change', (e) => {
+        const val = parseInt(e.target.value) || 1;
+        setPackSize(product.id, val, tr);
+      });
+      packInp.addEventListener('focus', (e) => e.target.select());
+    });
+
     fragment.appendChild(tr);
   });
 
   dom.productBody.innerHTML = '';
   dom.productBody.appendChild(fragment);
+}
+
+// ---- Pack Size Management ----
+function setPackSize(productId, newPackSize, rowElement) {
+  const size = Math.max(1, parseInt(newPackSize) || 1);
+  const targetProduct = products.find(p => p.id === productId);
+  if (targetProduct) {
+    targetProduct.packSize = size;
+    saveData();
+
+    // Sync pack input values in this row
+    if (rowElement) {
+      rowElement.querySelectorAll('.pack-input').forEach(inp => {
+        inp.value = size;
+      });
+    }
+
+    updateOrderSummary();
+    showSuccessToast(`แก้ไขขนาดแพ็ค: ${targetProduct.name} เป็น 1 ลัง = ${size} ${targetProduct.unit}`);
+  }
 }
 
 // ---- Amount Management ----
