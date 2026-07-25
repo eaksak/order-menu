@@ -82,6 +82,7 @@ function init() {
   rebuildUI();
   setupEventListeners();
   setupImportListeners();
+  setupPreviewListeners();
   updateDataInfo();
   // Update date every minute
   setInterval(updateDateDisplay, 60000);
@@ -529,7 +530,7 @@ function closeOrderPanel() {
   document.body.style.overflow = '';
 }
 
-// ---- Print ----
+// ---- Print / Preview ----
 function handlePrint() {
   const orderItems = getOrderItems();
 
@@ -538,17 +539,20 @@ function handlePrint() {
     return;
   }
 
-  // Fill print template
+  // Fill print template (for window.print)
   const now = new Date();
-  dom.printDate.textContent = `วันที่: ${now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}`;
-  dom.printTime.textContent = `เวลา: ${now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })} น.`;
+  const dateStr = now.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+  const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+
+  dom.printDate.textContent = `วันที่: ${dateStr}`;
+  dom.printTime.textContent = `เวลา: ${timeStr} น.`;
 
   let totalCartons = 0;
   let totalPieces = 0;
   let totalPrice = 0;
   let totalCost = 0;
 
-  dom.printBody.innerHTML = orderItems.map((item, i) => {
+  const rowsHtml = orderItems.map((item, i) => {
     const qtyPieces = item.qty * (item.packSize || 1);
     const subtotal = item.price * qtyPieces;
     totalCartons += item.qty;
@@ -571,14 +575,166 @@ function handlePrint() {
     `;
   }).join('');
 
+  // Fill hidden print area
+  dom.printBody.innerHTML = rowsHtml;
   dom.printTotalQty.textContent = totalCartons;
   document.getElementById('printTotalPieces').textContent = totalPieces;
   dom.printTotalValue.textContent = `฿ ${formatCurrency(totalPrice)}`;
   dom.printTotalCost.textContent = `฿ ${formatCurrency(totalCost)}`;
 
-  // Close panel first then print
+  // Fill preview overlay content
+  const previewContent = document.getElementById('previewContent');
+  previewContent.innerHTML = `
+    <div class="pv-header">
+      <h2>ใบสั่งสินค้า</h2>
+      <p class="pv-subtitle">Order Form — Silom Branch</p>
+      <div class="pv-meta">
+        <span>วันที่: ${dateStr}</span> &nbsp;|&nbsp;
+        <span>เวลา: ${timeStr} น.</span>
+      </div>
+    </div>
+    <table class="pv-table">
+      <thead>
+        <tr>
+          <th style="text-align:center;width:28px">#</th>
+          <th>ชื่อสินค้า</th>
+          <th style="text-align:center;width:45px">แพ็ค</th>
+          <th style="text-align:center;width:40px">ลัง</th>
+          <th style="text-align:center;width:45px">ชิ้น</th>
+          <th style="text-align:right;width:70px">รวม (฿)</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${orderItems.map((item, i) => {
+          const qtyPcs = item.qty * (item.packSize || 1);
+          return `
+            <tr>
+              <td style="text-align:center;">${i + 1}</td>
+              <td>${item.name}</td>
+              <td style="text-align:center;">${item.packSize || 1}</td>
+              <td style="text-align:center;font-weight:700;">${item.qty}</td>
+              <td style="text-align:center;">${qtyPcs}</td>
+              <td style="text-align:right;">${formatCurrency(item.price * qtyPcs)}</td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+      <tfoot>
+        <tr class="pv-total-row">
+          <td colspan="3" style="text-align:right;padding-right:8px;">รวมทั้งสิ้น</td>
+          <td style="text-align:center;">${totalCartons}</td>
+          <td style="text-align:center;">${totalPieces}</td>
+          <td style="text-align:right;font-weight:700;">฿ ${formatCurrency(totalPrice)}</td>
+        </tr>
+        <tr class="pv-cost-row">
+          <td colspan="5" style="text-align:right;padding-right:8px;">รวมทุน:</td>
+          <td style="text-align:right;font-weight:700;">฿ ${formatCurrency(totalCost)}</td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="pv-footer">
+      <div class="pv-sign-area">
+        <div class="pv-sign-box">
+          <div class="pv-sign-line"></div>
+          <p>ผู้สั่งสินค้า</p>
+        </div>
+        <div class="pv-sign-box">
+          <div class="pv-sign-line"></div>
+          <p>ผู้อนุมัติ</p>
+        </div>
+      </div>
+      <p class="pv-note">* เอกสารนี้จัดทำจากระบบสั่งสินค้าอัตโนมัติ</p>
+    </div>
+  `;
+
+  // Store order text for copy/share
+  window._orderText = generateOrderText(orderItems, dateStr, timeStr, totalCartons, totalPieces, totalPrice, totalCost);
+
+  // Close order panel, then show preview
   closeOrderPanel();
-  setTimeout(() => window.print(), 300);
+  setTimeout(() => {
+    const overlay = document.getElementById('previewOverlay');
+    overlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }, 200);
+}
+
+function generateOrderText(items, dateStr, timeStr, totalCartons, totalPieces, totalPrice, totalCost) {
+  let text = `📋 ใบสั่งสินค้า — Silom Branch\n`;
+  text += `📅 ${dateStr}  ⏰ ${timeStr} น.\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  items.forEach((item, i) => {
+    const pcs = item.qty * (item.packSize || 1);
+    text += `${i + 1}. ${item.name}\n`;
+    text += `   ${item.qty} ลัง × ${item.packSize || 1} = ${pcs} ${item.unit}  ฿${formatCurrency(item.price * pcs)}\n`;
+  });
+  text += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `📦 รวม: ${totalCartons} ลัง (${totalPieces} ชิ้น)\n`;
+  text += `💰 ยอดรวม: ฿ ${formatCurrency(totalPrice)}\n`;
+  text += `📊 รวมทุน: ฿ ${formatCurrency(totalCost)}\n`;
+  return text;
+}
+
+function closePreviewOverlay() {
+  const overlay = document.getElementById('previewOverlay');
+  overlay.classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function setupPreviewListeners() {
+  document.getElementById('closePreview').addEventListener('click', closePreviewOverlay);
+
+  // Copy order text to clipboard
+  document.getElementById('copyOrderBtn').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(window._orderText || '');
+      showSuccessToast('คัดลอกข้อความเรียบร้อย! วางใน LINE หรือแอพอื่นได้เลย');
+    } catch (e) {
+      // Fallback for older browsers
+      const ta = document.createElement('textarea');
+      ta.value = window._orderText || '';
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      ta.remove();
+      showSuccessToast('คัดลอกข้อความเรียบร้อย!');
+    }
+  });
+
+  // Share via Web Share API (mobile)
+  document.getElementById('shareOrderBtn').addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'ใบสั่งสินค้า — Silom Branch',
+          text: window._orderText || '',
+        });
+      } catch (e) {
+        // User cancelled share, no action needed
+      }
+    } else {
+      // Fallback: copy text
+      try {
+        await navigator.clipboard.writeText(window._orderText || '');
+        showSuccessToast('อุปกรณ์ไม่รองรับการแชร์ ได้คัดลอกข้อความแทนให้แล้ว');
+      } catch (e) {
+        alert('อุปกรณ์ไม่รองรับการแชร์ กรุณาใช้ปุ่มคัดลอกข้อความแทน');
+      }
+    }
+  });
+
+  // Print button inside preview
+  document.getElementById('printActionBtn').addEventListener('click', () => {
+    closePreviewOverlay();
+    setTimeout(() => window.print(), 300);
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closePreviewOverlay();
+  });
 }
 
 // ============================================

@@ -279,6 +279,30 @@
     </div>
   </div>
 
+  <!-- Mobile Order Preview Overlay -->
+  <div class="preview-overlay" id="previewOverlay">
+    <div class="preview-screen" id="previewScreen">
+      <div class="preview-toolbar">
+        <h3>📋 ใบสั่งสินค้า</h3>
+        <button class="preview-close-btn" id="closePreview">✕</button>
+      </div>
+      <div class="preview-content" id="previewContent">
+        <!-- Order preview content will be filled by JS -->
+      </div>
+      <div class="preview-actions">
+        <button class="preview-action-btn copy-btn" id="copyOrderBtn">
+          <span>📋</span> คัดลอกข้อความ
+        </button>
+        <button class="preview-action-btn share-btn" id="shareOrderBtn">
+          <span>📤</span> แชร์
+        </button>
+        <button class="preview-action-btn print-action-btn" id="printActionBtn">
+          <span>🖨️</span> สั่งพิมพ์
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>
