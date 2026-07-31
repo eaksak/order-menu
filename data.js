@@ -2812,6 +2812,376 @@ const PRODUCTS = [
     "unit": "ซอง",
     "packSize": 1,
     "category": "3อาหารกึ่งสำเร็จรูป"
+  },
+  {
+    "id": 282,
+    "plu": "RM001",
+    "name": "ครีมเทียมข้นหวาน คาร์เนชั่น 2 กก.",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 283,
+    "plu": "RM002",
+    "name": "คาร์เนชั่นเอ็กซ์ตร้า 385กรัม",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 284,
+    "plu": "RM003",
+    "name": "ผงชาปรุงสำเร็จ ชาตรามือ",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 285,
+    "plu": "RM004",
+    "name": "ชาเขียวปรุงสำเร็จ ชาตรามือ",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 286,
+    "plu": "RM005",
+    "name": "ชามงซิลอน 666",
+    "price": 0,
+    "cost": 0,
+    "unit": "ห่อ",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 287,
+    "plu": "RM006",
+    "name": "ชามงซิลอน ตราแรด",
+    "price": 0,
+    "cost": 0,
+    "unit": "ห่อ",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 288,
+    "plu": "RM007",
+    "name": "ผงชา Race House Tea",
+    "price": 0,
+    "cost": 0,
+    "unit": "ห่อ",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 289,
+    "plu": "RM008",
+    "name": "ผงโกโก้ ตราทิวลิป",
+    "price": 0,
+    "cost": 0,
+    "unit": "ห่อ",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 290,
+    "plu": "RM009",
+    "name": "น้ำเชื่อมมิตรผล สูตรดั้งเดิม",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 291,
+    "plu": "RM010",
+    "name": "น้ำตาลทรายขาว ตราลิน 1 กก.",
+    "price": 0,
+    "cost": 0,
+    "unit": "กระสอบ",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 292,
+    "plu": "RM011",
+    "name": "น้ำผึ้งป่าเดือนห้า",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 293,
+    "plu": "RM012",
+    "name": "น้ำหวานเฮลซ์บลูบอย ครีมโซดา(เขียว)",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 294,
+    "plu": "RM013",
+    "name": "น้ำหวานเฮลซ์บลูบอย สละ(แดง)",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 295,
+    "plu": "RM014",
+    "name": "ข้าวเบญจรงค์ 5 กิโลกรัม",
+    "price": 0,
+    "cost": 0,
+    "unit": "ถุง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 296,
+    "plu": "RM015",
+    "name": "ซอสพริก ROZA",
+    "price": 0,
+    "cost": 0,
+    "unit": "ถง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 297,
+    "plu": "RM016",
+    "name": "ซอสมะเขือเทศ ROZA",
+    "price": 0,
+    "cost": 0,
+    "unit": "ถุง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 298,
+    "plu": "RM017",
+    "name": "ซอสปรุงรสผัดเขียว ภูเขาทอง",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 299,
+    "plu": "RM018",
+    "name": "น้ำปลา ตราทิพรส",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 300,
+    "plu": "RM019",
+    "name": "น้ำมันปาล์ม ตราแฮปปี้ (700ml)",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 301,
+    "plu": "RM020",
+    "name": "น้ำมันปาล์ม ตราเกสร",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 302,
+    "plu": "RM021",
+    "name": "น้ำมันปาล์ม ตราโบนัส",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 303,
+    "plu": "RM022",
+    "name": "น้ำมันปาล์ม ตราขวดใช้",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 304,
+    "plu": "RM023",
+    "name": "ปลากระป๋อง ตราคู่ครัว",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 305,
+    "plu": "RM024",
+    "name": "ปลากระป๋อง ตราชีเชฟ",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 306,
+    "plu": "RM025",
+    "name": "มาม่ารสต้มยำกุ้งน้ำข้น (ลัง)",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 307,
+    "plu": "RM026",
+    "name": "รสดีไก่ 800กรัม",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 308,
+    "plu": "RM027",
+    "name": "ไวไวควิกซอง รสต้มแคล้ง (ลัง)",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 309,
+    "plu": "RM028",
+    "name": "ไวไวควิกซอง รสต้มยำกุ้ง (ลัง)",
+    "price": 0,
+    "cost": 0,
+    "unit": "ลัง",
+    "packSize": 1,
+    "category": "Aวัตถุดิบ"
+  },
+  {
+    "id": 310,
+    "plu": "PK001",
+    "name": "กล่องข้าว 3 ช่อง PRIME",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 311,
+    "plu": "PK002",
+    "name": "ถ้วยนึ่ง 7 ออนซ์ NT-07 สีใส เน็กซ์เทค",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 312,
+    "plu": "PK003",
+    "name": "ฝาเรียบ 95 ไม่เจาะรู TL",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 313,
+    "plu": "PK004",
+    "name": "ชามอาหาร TB-5G TL",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 314,
+    "plu": "PK005",
+    "name": "ขวดเพชร 150 ml.",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 315,
+    "plu": "PK006",
+    "name": "ถุงหิ้วใส่แก้ว 16-32 ฮีโร่",
+    "price": 0,
+    "cost": 0,
+    "unit": "ห่อ",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 316,
+    "plu": "PK007",
+    "name": "ถุงร้อน 5x8 นิ้ว",
+    "price": 0,
+    "cost": 0,
+    "unit": "ห่อ",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 317,
+    "plu": "PK008",
+    "name": "ถุงร้อน 6x9 นิ้ว",
+    "price": 0,
+    "cost": 0,
+    "unit": "ห่อ",
+    "packSize": 1,
+    "category": "BPackage"
+  },
+  {
+    "id": 318,
+    "plu": "PK009",
+    "name": "กล่องเบเกอรี่ TR-24",
+    "price": 0,
+    "cost": 0,
+    "unit": "แพ็ค",
+    "packSize": 1,
+    "category": "BPackage"
   }
 ];
 
@@ -2825,6 +3195,8 @@ const CATEGORY_DISPLAY = {
   "7บริการ": "บริการ",
   "8เบเกอรี่": "เบเกอรี่",
   "9ฝากขาย": "ฝากขาย",
+  "Aวัตถุดิบ": "วัตถุดิบ",
+  "BPackage": "Package (บรรจุภัณฑ์)",
   "Uncategory": "อื่นๆ"
 };
 
@@ -2838,6 +3210,8 @@ const CATEGORY_ICONS = {
   "7บริการ": "🖨️",
   "8เบเกอรี่": "🧁",
   "9ฝากขาย": "📦",
+  "Aวัตถุดิบ": "🥬",
+  "BPackage": "📦",
   "Uncategory": "📋"
 };
 
@@ -2851,5 +3225,7 @@ const CATEGORIES = [
   "7บริการ",
   "8เบเกอรี่",
   "9ฝากขาย",
+  "Aวัตถุดิบ",
+  "BPackage",
   "Uncategory"
 ];
