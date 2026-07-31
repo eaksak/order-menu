@@ -168,6 +168,9 @@ function updateDateDisplay() {
   dom.dateDisplay.innerHTML = `${dateStr}<br>${timeStr} น.`;
 }
 
+// Categories hidden from filter pills bar (data retained in system)
+const HIDDEN_CATEGORIES = ['4อาหารปรุงสุก', '7บริการ', '8เบเกอรี่', '9ฝากขาย'];
+
 // ---- Category Pills ----
 function renderCategoryPills() {
   // Count products per category
@@ -181,6 +184,8 @@ function renderCategoryPills() {
 
   // Create category pills
   categories.forEach(cat => {
+    if (HIDDEN_CATEGORIES.includes(cat)) return;
+
     const pill = document.createElement('button');
     pill.className = 'category-pill';
     pill.dataset.category = cat;
