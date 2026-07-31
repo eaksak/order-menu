@@ -115,7 +115,8 @@ function saveData() {
 
 function rebuildCategoriesFromProducts() {
   categories = [...new Set(products.map(p => p.category))].sort((a, b) => a.localeCompare(b, 'th'));
-  // Add display names for any new categories not in the original map
+  categoryDisplay = { ...CATEGORY_DISPLAY };
+  categoryIcons = { ...CATEGORY_ICONS };
   categories.forEach(cat => {
     if (!categoryDisplay[cat]) {
       categoryDisplay[cat] = cat;
