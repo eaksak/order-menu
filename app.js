@@ -865,45 +865,112 @@ function readCSVFile(file) {
   reader.readAsText(file, 'UTF-8');
 }
 
+function parseCSVLine(line) {
+  const result = [];
+  let cur = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        cur += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (c === ',' && !inQuotes) {
+      result.push(cur);
+      cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
 function parseCSV(text) {
   const lines = text.split(/\r?\n/);
   if (lines.length < 2) return [];
 
-  // Try to detect header
-  const header = lines[0].toLowerCase();
-  let nameIdx = 2, priceIdx = 3, costIdx = 4, unitIdx = 5, categoryIdx = 6, pluIdx = 1, packSizeIdx = -1;
+  // Find header row (search first 15 lines for table header keywords)
+  let headerLineIdx = -1;
+  for (let i = 0; i < Math.min(15, lines.length); i++) {
+    const lineStr = lines[i].toLowerCase();
+    if (lineStr.includes('ชื่อ') || lineStr.includes('name') || lineStr.includes('plu') || lineStr.includes('รหัสสินค้า')) {
+      headerLineIdx = i;
+      break;
+    }
+  }
 
-  // Auto-detect column positions from header
-  const headerParts = lines[0].split(',').map(h => h.trim().toLowerCase());
-  headerParts.forEach((h, i) => {
-    if (h === 'name' || h.includes('ชื่อ')) nameIdx = i;
-    if (h === 'price' || h.includes('ราคา')) priceIdx = i;
-    if (h === 'cost' || h.includes('ทุน') || h.includes('ต้นทุน')) costIdx = i;
-    if (h === 'unit' || h.includes('หน่วย')) unitIdx = i;
-    if (h === 'category' || h.includes('หมวด') || h.includes('ประเภท')) categoryIdx = i;
-    if (h === 'plu code' || h === 'plu' || h.includes('barcode') || h.includes('บาร์โค้ด')) pluIdx = i;
-    if (h.includes('pack') || h.includes('ลัง') || h.includes('กล่องใหญ่') || h.includes('บรรจุ')) packSizeIdx = i;
-  });
+  if (headerLineIdx === -1) headerLineIdx = 0;
+
+  const headerLine = lines[headerLineIdx];
+  const headerParts = parseCSVLine(headerLine).map(h => h.trim().toLowerCase());
+
+  // Detect Silom POS Sales Report format
+  const isSilomSales = text.includes('รายงานสรุปยอดขายตามสินค้า') ||
+                       (headerParts.includes('กำไร/ขาดทุน') && headerParts.includes('จำนวน'));
+
+  let nameIdx = -1, priceIdx = -1, costIdx = -1, unitIdx = -1, categoryIdx = -1, pluIdx = -1, packSizeIdx = -1, qtyIdx = -1;
+
+  if (isSilomSales) {
+    // Silom POS Sales Report column mapping
+    pluIdx = 2;       // Col C: PLU
+    nameIdx = 3;      // Col D: Name
+    qtyIdx = 4;       // Col E: Qty
+    priceIdx = 5;     // Col F: Price
+    costIdx = 8;      // Col I: Cost
+    categoryIdx = 12; // Col M: Category
+    unitIdx = -1;
+  } else {
+    // Standard CSV auto-detection
+    headerParts.forEach((h, i) => {
+      if (h === 'name' || h.includes('ชื่อ')) nameIdx = i;
+      if (h === 'price' || h.includes('ราคา')) priceIdx = i;
+      if (h === 'cost' || h.includes('ทุน') || h.includes('ต้นทุน')) costIdx = i;
+      if (h === 'unit' || h.includes('หน่วย')) unitIdx = i;
+      if (h === 'category' || h.includes('หมวด') || h.includes('ประเภท')) categoryIdx = i;
+      if (h === 'plu code' || h === 'plu' || h.includes('barcode') || h.includes('บาร์โค้ด') || h.includes('รหัสสินค้า')) pluIdx = i;
+      if (h.includes('pack') || h.includes('ลัง') || h.includes('กล่องใหญ่') || h.includes('บรรจุ')) packSizeIdx = i;
+      if (h === 'จำนวน' || h === 'qty' || h === 'quantity') qtyIdx = i;
+    });
+
+    if (nameIdx === -1) nameIdx = 2;
+    if (priceIdx === -1) priceIdx = 3;
+    if (costIdx === -1) costIdx = 4;
+    if (unitIdx === -1) unitIdx = 5;
+    if (categoryIdx === -1) categoryIdx = 6;
+    if (pluIdx === -1) pluIdx = 1;
+  }
 
   const products = [];
 
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = headerLineIdx + 1; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line || line.startsWith(',,,')) continue;
 
-    const parts = line.split(',');
-    const maxIdx = Math.max(nameIdx, priceIdx, costIdx, unitIdx, categoryIdx, pluIdx, packSizeIdx);
-    if (parts.length <= maxIdx) continue;
+    const parts = parseCSVLine(line);
 
-    const name = parts[nameIdx]?.trim();
-    const category = parts[categoryIdx]?.trim();
-    if (!name || !category) continue;
+    // Skip summary / total footer lines
+    if (parts[0] && (parts[0].includes('รวม') || parts[0].includes('Total'))) continue;
 
-    const price = parseFloat(parts[priceIdx]) || 0;
-    const cost = parseFloat(parts[costIdx]) || 0;
-    const unit = parts[unitIdx]?.trim() || 'ชิ้น';
-    const plu = parts[pluIdx]?.trim() || '';
-    const no = parseInt(parts[0]) || i;
+    const name = nameIdx !== -1 && parts[nameIdx] ? parts[nameIdx].trim() : '';
+    let category = categoryIdx !== -1 && parts[categoryIdx] ? parts[categoryIdx].trim() : '';
+
+    if (!name) continue;
+
+    // Fallback for category if empty or numeric
+    if (!category || category === '0' || !isNaN(Number(category))) {
+      const foundCat = parts.find(p => p && /^(1|2|3|4|5|6|7|8|9|A_|Uncategory)/.test(p.trim()));
+      category = foundCat ? foundCat.trim() : 'Uncategory';
+    }
+
+    const price = priceIdx !== -1 ? parseFloat(parts[priceIdx]) || 0 : 0;
+    const cost = costIdx !== -1 ? parseFloat(parts[costIdx]) || 0 : 0;
+    const unit = unitIdx !== -1 && parts[unitIdx] ? parts[unitIdx].trim() : 'ชิ้น';
+    const plu = pluIdx !== -1 && parts[pluIdx] ? parts[pluIdx].trim() : '';
+    const no = parseInt(parts[0]) || (i - headerLineIdx);
     const packSize = packSizeIdx !== -1 ? parseInt(parts[packSizeIdx]) || 1 : 1;
 
     products.push({
